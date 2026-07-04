@@ -1,95 +1,110 @@
 # Warisan Digital Tersembunyi
-**Sistem Kriptografi dan Steganografi untuk Aset Digital**
 
----
+Sistem kriptografi dan steganografi untuk menyimpan informasi warisan digital secara aman di dalam foto keluarga.
 
 ## Deskripsi
 
-Aplikasi ini memungkinkan pengguna untuk menyembunyikan informasi warisan digital (kata sandi akun bank, kripto wallet, email, dan aset digital lainnya) di dalam foto keluarga biasa. Foto yang dihasilkan tampak normal secara visual namun menyimpan data terenkripsi di dalamnya.
+Aplikasi ini memungkinkan pengguna untuk:
+- menyembunyikan pesan rahasia ke dalam foto menggunakan enkripsi AES-256 dan steganografi LSB,
+- mengungkap kembali pesan dari foto yang telah diberi data tersembunyi,
+- memeriksa apakah sebuah foto sudah mengandung pesan tersembunyi atau belum,
+- menghasilkan laporan PDF otomatis setelah proses penyembunyian berhasil.
 
----
+Hasil akhirnya adalah foto yang secara visual tetap tampak normal, tetapi di dalamnya menyimpan data terenkripsi yang hanya bisa dibuka dengan kata sandi yang benar.
 
-## Algoritma yang Digunakan
+## Fitur yang Sudah Diterapkan
+
+### 1. Sembunyikan Pesan ke dalam Foto
+- Pilih foto carrier (format JPG, PNG, BMP, TIFF, dll.)
+- Masukkan pesan yang ingin disembunyikan
+- Tentukan kata sandi yang kuat
+- Konfirmasi kata sandi
+- Pilih folder hasil output secara opsional
+- Simpan foto hasil dengan nama yang bisa ditentukan
+- Menampilkan pratinjau foto dan estimasi kapasitas pesan
+
+### 2. Ungkap Pesan dari Foto
+- Pilih foto yang diduga mengandung pesan tersembunyi
+- Masukkan kata sandi yang digunakan saat proses penyembunyian
+- Tampilkan isi pesan yang berhasil didekripsi
+- Menyediakan fitur copy hasil pesan ke clipboard
+
+### 3. Cek Status Foto
+- Periksa apakah foto mengandung pesan tersembunyi atau tidak
+- Menampilkan informasi seperti ukuran gambar, kapasitas, dan persentase penggunaan ruang stego
+
+### 4. Laporan PDF Otomatis
+- Setelah proses penyembunyian berhasil, aplikasi membuat laporan PDF berisi:
+  - nama file carrier,
+  - nama file hasil,
+  - panjang pesan,
+  - kapasitas foto,
+  - instruksi untuk ahli waris.
+
+### 5. Antarmuka Modern
+- Menggunakan antarmuka berbasis CustomTkinter
+- Tersedia halaman Beranda, Sembunyikan Pesan, Ungkap Pesan, Cek Status Foto, dan Panduan Cara Kerja
+
+## Cara Kerja
 
 ### Kriptografi: AES-256-CBC
-- Standar enkripsi simetris yang digunakan oleh pemerintah AS dan institusi keuangan global
-- Kunci 256-bit dihasilkan dari kata sandi menggunakan SHA-256
-- Mode CBC (Cipher Block Chaining) memastikan setiap blok bergantung pada blok sebelumnya
-- IV (Initialization Vector) acak digunakan untuk keamanan tambahan
+- Pesan dienkripsi sebelum disisipkan ke dalam foto
+- Kata sandi diolah menjadi kunci 256-bit menggunakan SHA-256
+- Menggunakan mode CBC dan IV acak untuk keamanan tambahan
 
-### Steganografi: LSB (Least Significant Bit)
-- Data tersembunyi di bit paling tidak signifikan dari setiap kanal warna piksel (R, G, B)
-- Perubahan satu bit hanya mengubah warna sebesar 0.4%, tidak terdeteksi secara visual
-- Foto disimpan sebagai PNG (format lossless) agar data tidak rusak
+### Steganografi: LSB
+- Data terenkripsi disisipkan ke bit paling tidak signifikan dari piksel foto
+- Perubahan yang terjadi sangat kecil sehingga tidak terlihat secara visual
+- Format output yang digunakan adalah PNG agar data tetap aman dan tidak rusak
 
----
+## Persyaratan
+
+- Python 3.10 atau lebih baru
+- Paket yang dibutuhkan dapat diinstal dari file requirements.txt
 
 ## Instalasi
 
 ```bash
-# 1. Clone atau unduh repositori ini
-# 2. Install dependencies
 pip install -r requirements.txt
+```
 
-# 3. Jalankan aplikasi
+## Menjalankan Aplikasi
+
+```bash
 python app.py
 ```
 
-### Persyaratan
-- Python 3.8 atau lebih baru
-- Sistem operasi: Windows, macOS, atau Linux (dengan tkinter)
+## Membuat File Executable (.exe)
 
----
+Aplikasi juga dapat dibangun menjadi file .exe untuk Windows menggunakan PyInstaller.
 
-## Cara Penggunaan
+```bash
+python -m PyInstaller --onefile --noconsole --add-data "assets;assets" -n WarisanDigital app.py
+```
 
-### Menyembunyikan Pesan
-
-1. Buka halaman **Sembunyikan Pesan**
-2. Klik **Pilih Foto** dan pilih foto keluarga (JPG, PNG, BMP)
-3. Tulis pesan warisan di kolom teks (kata sandi akun, nomor rekening, dll)
-4. Buat kata sandi yang kuat untuk enkripsi
-5. Konfirmasi kata sandi
-6. Pilih folder output (opsional)
-7. Klik **Sembunyikan Pesan dalam Foto**
-8. Simpan foto hasil di tempat yang aman
-
-### Mengungkap Pesan
-
-1. Buka halaman **Ungkap Pesan**
-2. Pilih foto yang mengandung pesan tersembunyi (file `_warisan.png`)
-3. Masukkan kata sandi yang digunakan saat menyembunyikan
-4. Klik **Ungkap Pesan**
-5. Baca informasi warisan yang muncul
-
----
-
-## Keamanan
-
-- Data dienkripsi sebelum disembunyikan dalam foto
-- Tanpa kata sandi yang benar, pesan tidak dapat dibaca
-- Gunakan kata sandi yang kuat (minimal 12 karakter, kombinasi huruf besar/kecil, angka, simbol)
-- Simpan foto di lokasi terpercaya (cloud pribadi, USB, hardisk terenkripsi)
-- Jangan hapus atau konversi foto ke format JPEG karena akan merusak data tersembunyi
-
----
+Hasil file .exe akan berada di folder dist.
 
 ## Struktur Proyek
 
+```text
+app_warisan/
+├── app.py                # Aplikasi utama dan antarmuka pengguna
+├── crypto_engine.py      # Modul enkripsi dan dekripsi AES-256
+├── stego_engine.py       # Modul steganografi LSB
+├── pdf_exporter.py       # Pembuatan laporan PDF otomatis
+├── ui_components.py      # Komponen UI kustom
+├── assets/               # File pendukung seperti icon aplikasi
+├── requirements.txt      # Daftar dependensi
+└── README.md             # Dokumentasi proyek
 ```
-warisan_digital/
-- app.py              # Aplikasi utama dan antarmuka pengguna
-- crypto_engine.py    # Modul enkripsi/dekripsi AES-256-CBC
-- stego_engine.py     # Modul steganografi LSB
-- ui_components.py    # Komponen UI kustom
-- requirements.txt    # Daftar dependensi
-- README.md           # Dokumentasi ini
-```
 
----
+## Catatan Keamanan
 
-## Mata Kuliah
+- Gunakan kata sandi yang kuat dan aman
+- Simpan file hasil di lokasi yang terpercaya
+- Jangan mengubah format foto hasil secara sembarangan karena dapat merusak data tersembunyi
+- Pesan hanya bisa dibuka jika kata sandi yang benar digunakan
 
-**Kriptografi** - Sistem Warisan Digital Tersembunyi dalam Foto Keluarga
+## Lisensi
 
-Algoritma yang dibahas: AES (Advanced Encryption Standard) dan LSB Steganography
+Proyek ini dibuat untuk kebutuhan pembelajaran dan demonstrasi sistem kriptografi serta steganografi.
