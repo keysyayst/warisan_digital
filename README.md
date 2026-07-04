@@ -74,14 +74,6 @@ pip install -r requirements.txt
 python app.py
 ```
 
-## Membuat File Executable (.exe)
-
-Aplikasi juga dapat dibangun menjadi file .exe untuk Windows menggunakan PyInstaller.
-
-```bash
-python -m PyInstaller --onefile --noconsole --add-data "assets;assets" -n WarisanDigital app.py
-```
-
 Hasil file .exe akan berada di folder dist.
 
 ## Struktur Proyek
@@ -104,7 +96,3 @@ app_warisan/
 - Simpan file hasil di lokasi yang terpercaya
 - Jangan mengubah format foto hasil secara sembarangan karena dapat merusak data tersembunyi
 - Pesan hanya bisa dibuka jika kata sandi yang benar digunakan
-
-## Lisensi
-
-Proyek ini dibuat untuk kebutuhan pembelajaran dan demonstrasi sistem kriptografi serta steganografi.
